@@ -9,7 +9,7 @@ using Random
 
 
 function random_walk_step!(network::Network, dt::Float64, speed_variance::Float64)
-    for i in 1:network.n_balloons
+    for i in 1:network.net_size
         # Current position
         lat, lon, alt = network.positions[i, :]
         

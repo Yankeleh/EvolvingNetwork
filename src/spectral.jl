@@ -6,7 +6,7 @@ Module for computing
 using LinearAlgebra, Arpack, SparseArrays
 
 function compute_spectral_properties(network::Network)
-    n::Int64  = network.n_balloons
+    n::Int64  = network.net_size
     
     # Compute smallest eigenvalues + eigenvectors
     # Request k+1 eigenvalues (0 will be smallest)

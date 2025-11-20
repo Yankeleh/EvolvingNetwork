@@ -22,8 +22,8 @@ end
 #Network structure
 
 mutable struct Network
-    n_balloons::Int
-    positions::Matrix{Float64} #n_balloons x 3 (lat_deg, lon_deg, alt_km)
+    net_size::Int
+    positions::Matrix{Float64} #net_size x 3 (lat_deg, lon_deg, alt_km)
     
     adjacency::SparseMatrixCSC{Float64, Int}
     laplacian::SparseMatrixCSC{Float64, Int}
@@ -35,12 +35,12 @@ end
 #Constructor for the network
 
 
-function Network(n_balloons::Int)
+function Network(net_size::Int)
     # Initialize positions using proper sphere sampling
 
-    positions = Matrix{Float64}(undef, n_balloons, 3)
+    positions = Matrix{Float64}(undef, net_size, 3)
 
-    for i in 1:n_balloons
+    for i in 1:net_size
         # Uniform sampling on sphere surface
         θ = 2π * rand()  # Longitude: 0 to 2π
         φ = acos(1 - 2*rand())  # Latitude: compensates for sphere curvature
@@ -54,11 +54,11 @@ function Network(n_balloons::Int)
     end
     
     # Initialize empty matrices (will be built by build_adjacency!)
-    adjacency = spzeros(Float64, n_balloons, n_balloons)
-    laplacian = spzeros(Float64, n_balloons, n_balloons)
+    adjacency = spzeros(Float64, net_size, net_size)
+    laplacian = spzeros(Float64, net_size, net_size)
     spectral_history = SpectralHistory([], [], [], [], [], [])
     
-    return Network(n_balloons, positions, adjacency, laplacian, spectral_history)
+    return Network(net_size, positions, adjacency, laplacian, spectral_history)
 end
 
 

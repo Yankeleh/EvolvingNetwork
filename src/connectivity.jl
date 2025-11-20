@@ -6,7 +6,7 @@ using Geodesy, SparseArrays
 using Base.Threads
 
 
-function balloon_distance(pos1, pos2)  # pos = [lat, lon, alt]
+function distance(pos1, pos2)  # pos = [lat, lon, alt]
     lla1 = LLA(pos1[1], pos1[2], pos1[3] * 1000)  # altitude in meters
     lla2 = LLA(pos2[1], pos2[2], pos2[3] * 1000)
     
@@ -29,7 +29,7 @@ end
 
 
 function build_adjacency!(network::Network)
-    n = network.n_balloons
+    n = network.net_size
     
     # Pre-allocate arrays for each thread to avoid race conditions
     n_threads = Threads.nthreads()
@@ -48,8 +48,7 @@ function build_adjacency!(network::Network)
             pos_i = network.positions[i, :]
             pos_j = network.positions[j, :]
             
-            dist = balloon_distance(pos_i, pos_j)
-            w = weight(dist)
+            w = weight(distance(pos_i, pos_j))
             
             if w > 0.0
                 push!(I_local, i); push!(J_local, j); push!(V_local, w)
