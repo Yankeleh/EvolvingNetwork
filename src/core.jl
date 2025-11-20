@@ -1,12 +1,10 @@
-#= 
-Module to implement balloon Network structure. This is what we will evolve.
+#=
+Network struct, constructor, simulate!, helpers
 =#
 
-module BalloonNetwork
 
 using LinearAlgebra, SparseArrays, Random
 using StatsBase, Printf
-
 
 
 #Structure for keeping track of spectral properties for network
@@ -21,7 +19,7 @@ mutable struct SpectralHistory
 end
 
 
-#Balloon network structure
+#Network structure
 
 mutable struct Network
     n_balloons::Int
@@ -32,11 +30,6 @@ mutable struct Network
     
     spectral_history::SpectralHistory
 end
-
-include("dynamics.jl") 
-include("connectivity.jl")
-include("spectral.jl")
-include("analysis.jl")    
 
 
 #Constructor for the network
@@ -89,15 +82,6 @@ function simulate!()
 end
 
 
-function analyze_spectral_evolution()
+function spectral_evolution()
     #Create time series of eigenvalue history
-end
-
-
-
-
-export Network, simulate!, analyze_spectral_evolution
-
-
-
 end

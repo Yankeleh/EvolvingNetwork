@@ -1,5 +1,5 @@
 #=
-    Module for running random walk
+Module for running random walk
 =#
 
 using Random
