@@ -30,9 +30,10 @@ function compute_spectral_properties(network::Network)
     
     return (
         eigenvalues = λ,
+        spectral_radius = spectral_radius,
+        spectral_gap = spectral_gap,
         num_components = num_components,
         algebraic_connectivity = algebraic_connectivity,
         fiedler_vector = fiedler_vector
-        
     )
 end

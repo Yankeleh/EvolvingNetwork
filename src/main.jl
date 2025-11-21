@@ -3,7 +3,7 @@ Main module file for EvolvingNetork
 Defines module structure, includes submodules, and exports public API
 =#
 
-module EvolvingNetorkNetwork
+module EvolvingNetwork
 
 using LinearAlgebra, SparseArrays, Random
 using StatsBase, Printf
