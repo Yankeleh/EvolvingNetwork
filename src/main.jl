@@ -21,7 +21,7 @@ include("spectral.jl")
 include("analysis.jl")
 include("plotting.jl")
 
-# Public API - export only what users should call directly
+# Public API
 export Network, 
        SpectralHistory,
        simulate!,
