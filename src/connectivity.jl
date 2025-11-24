@@ -63,5 +63,5 @@ function build_adjacency!(network::Network)
     V = vcat(V_arrays...)
     
     network.adjacency = sparse(I, J, V, n, n)
-     build_laplacian_sparse!(network)
+    build_laplacian_sparse!(network)
 end
