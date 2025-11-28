@@ -34,6 +34,7 @@ function compute_spectral_properties(network::Network)
         spectral_gap = spectral_gap,
         num_components = num_components,
         algebraic_connectivity = algebraic_connectivity,
-        fiedler_vector = fiedler_vector
+        fiedler_vector = fiedler_vector,
+        max_degree = maximum(diag(network.laplacian))
     )
 end
