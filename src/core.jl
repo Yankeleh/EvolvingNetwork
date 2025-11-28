@@ -76,11 +76,43 @@ function build_laplacian_sparse!(network::Network)
 end
 
 
-function simulate!()
-    #Run dynamics.jl
-    #Update Network struct
+#The default quantities will be dt = 30min, speed_var = (10m/s)^2 = (0.6 km/min)^2
+
+function simulate!(network::Network, duration_hours::Float64, dt_minutes::Int64 = 30, speed_variance::Float64 = 0.036)
+    
+    n_steps = Int(duration_hours * 60 / dt_minutes)
+    
+    for step in 1:n_steps
+        # Update positions
+        random_walk_step!(network, dt_minutes, speed_variance)
+        
+        # Rebuild connectivity
+        build_adjacency!(network)
+        
+        # Compute and store spectral properties
+        spectral_data = compute_spectral_properties(network)
+        update_spectral_history!(network, spectral_data, step * dt_minutes / 60.0)
+        
+        # Print progress every 10 steps
+        if step % 10 == 0
+            println("Step $step/$n_steps, Components: $(spectral_data.num_components)")
+        end
+    end
 end
 
+
+function update_spectral_history!(network::Network, spectral_data, time::Float64)
+    push!(network.spectral_history.algebraic_connectivity, spectral_data.algebraic_connectivity)
+    push!(network.spectral_history.num_components, spectral_data.num_components)
+    
+    # Cheeger bounds
+    cheeger_lower = 0.5 * spectral_data.spectral_gap
+    cheeger_upper = sqrt(2 * spectral_data.max_degree * spectral_data.spectral_gap)
+    
+    push!(network.spectral_history.cheeger_lower_bound, cheeger_lower)
+    push!(network.spectral_history.cheeger_upper_bound, cheeger_upper)
+    push!(network.spectral_history.timestamps, time)
+end
 
 function spectral_evolution()
     #Create time series of eigenvalue history

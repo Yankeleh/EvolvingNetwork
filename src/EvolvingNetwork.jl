@@ -25,6 +25,7 @@ include("plotting.jl")
 export Network, 
        SpectralHistory,
        simulate!,
+       build_adjacency!
        analyze_connectivity_probability,
        analyze_average_components,
        plot_connectivity_probability,
