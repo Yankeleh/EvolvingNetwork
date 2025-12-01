@@ -34,6 +34,7 @@ end
 
 #Constructor for the network
 
+#Possible TODO: add method for other disstributions, e.g. concentrated
 
 function Network(net_size::Int)
     # Initialize positions using proper sphere sampling
@@ -78,7 +79,7 @@ end
 
 #The default quantities will be dt = 30min, speed_var = (10m/s)^2 = (0.6 km/min)^2
 
-function simulate!(network::Network, duration_hours::Float64, dt_minutes::Int64 = 30, speed_variance::Float64 = 0.036)
+function simulate!(network::Network, duration_hours::Float64, dt_minutes::Int64, speed_variance::Float64)
     
     n_steps = Int(duration_hours * 60 / dt_minutes)
     
