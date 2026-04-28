@@ -3,19 +3,19 @@ Module for computing
 =#
 
 
-using LinearAlgebra, Arpack, SparseArrays
+using LinearAlgebra, KrylovKit, SparseArrays
 
 function compute_spectral_properties(network::Network)
     n::Int64  = network.net_size
     
     # Compute smallest eigenvalues + eigenvectors
     # Request k+1 eigenvalues (0 will be smallest)
-    k = min(50, n-2)  # Get 50 smallest eigenvalues
+    k = min(5, n-2)  # Get 5 smallest eigenvalues
     
-    λ, v = eigs(Symmetric(network.laplacian), nev=k, which=:SR, ritzvec=true)
+    λ, v, _ = eigsolve(network.laplacian, nev=k, which=:SR, ritzvec=true, tol=1e-6, maxiter=1000)
     
     # Get largest eigenvalues (spectral radius) for estimating Cheeger constant
-    λ_max, _ = eigs(Symmetric(network.laplacian), nev=2, which=:LR)
+    λ_max, _ = eigsolve(Symmetric(network.laplacian), nev=2, which=:LR, ritzvec=true, tol=1e-6, maxiter=1000)
     spectral_radius = real(λ_max[1])
     spectral_gap = real(λ_max[1]-λ_max[2])
 

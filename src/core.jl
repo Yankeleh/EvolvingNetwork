@@ -12,7 +12,7 @@ using StatsBase, Printf
 mutable struct SpectralHistory
     algebraic_connectivity::Vector{Float64}
     num_components::Vector{Int}
-    largest_component_size::Vector{Int}
+    max_degree::Vector{Int}
     cheeger_lower_bound::Vector{Float64}
     cheeger_upper_bound::Vector{Float64}
     timestamps::Vector{Float64}
@@ -32,10 +32,10 @@ mutable struct Network
 end
 
 
-#Constructor for the network
 
-#Possible TODO: add method for other disstributions, e.g. concentrated
+#Possible TODO: add method for other initial distributions, e.g. concentrated in region
 
+#Constructor for network
 function Network(net_size::Int)
     # Initialize positions using proper sphere sampling
 
@@ -79,8 +79,8 @@ end
 
 #The default quantities will be dt = 30min, speed_var = (10m/s)^2 = (0.6 km/min)^2
 
-function simulate!(network::Network, duration_hours::Float64, dt_minutes::Int64, speed_variance::Float64)
-    
+function simulate!(network::Network, duration_hours::Float64, dt_minutes::Float64, speed_variance::Float64)
+
     n_steps = Int(duration_hours * 60 / dt_minutes)
     
     for step in 1:n_steps
@@ -92,12 +92,7 @@ function simulate!(network::Network, duration_hours::Float64, dt_minutes::Int64,
         
         # Compute and store spectral properties
         spectral_data = compute_spectral_properties(network)
-        update_spectral_history!(network, spectral_data, step * dt_minutes / 60.0)
-        
-        # Print progress every 10 steps
-        if step % 10 == 0
-            println("Step $step/$n_steps, Components: $(spectral_data.num_components)")
-        end
+        update_spectral_history!(network, spectral_data, step * dt_minutes)
     end
 end
 
@@ -105,6 +100,7 @@ end
 function update_spectral_history!(network::Network, spectral_data, time::Float64)
     push!(network.spectral_history.algebraic_connectivity, spectral_data.algebraic_connectivity)
     push!(network.spectral_history.num_components, spectral_data.num_components)
+    push!(network.spectral_history.max_degree, spectral_data.max_degree)
     
     # Cheeger bounds
     cheeger_lower = 0.5 * spectral_data.spectral_gap

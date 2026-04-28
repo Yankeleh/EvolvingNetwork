@@ -7,7 +7,7 @@ module EvolvingNetwork
 
 using LinearAlgebra, SparseArrays, Random
 using StatsBase, Printf
-using Geodesy, Arpack
+using Geodesy, KrylovKit
 using Base.Threads
 
 # Set random seed for reproducibility
